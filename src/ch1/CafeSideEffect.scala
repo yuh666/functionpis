@@ -10,7 +10,7 @@ object CafeSideEffect extends App {
   /**
     * 信用卡💳
     */
-  case class CreditCard()
+  class CreditCard()
 
   /**
     * 咖啡实例
