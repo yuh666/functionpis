@@ -81,16 +81,33 @@ object TailRecDemo extends App {
     */
   def isSorted[A](arr: Array[A], ordered: (A, A) => Boolean): Boolean = {
     var res = true
-    for (i <- 0 until arr.length if ((i + 1) < arr.length)) {
-      val temp = ordered(arr(i), arr(i + 1))
-      if(!temp)res = temp
-    }
+    for (i <- 0 until arr.length if ((i + 1) < arr.length && ordered(arr(i),arr(i+1)))) res = false
     res
+  }
+
+
+  /**
+    * 检查是否是有序的 递归就是在此步返回或者在以后的某一步返回
+    * @param arr
+    * @param ordered
+    * @tparam A
+    * @return
+    */
+  def isSorted1[A](arr: Array[A], ordered: (A, A) => Boolean): Boolean = {
+    def go(n:Int):Boolean={
+      n match {
+        case n if n > arr.length-1 => true
+        case n if(!ordered(arr(n),arr(n+1))) => false
+        case _ => go(n+1)
+      }
+    }
+    go(0)
   }
 
 
   //println(msg("fib",10,fib))
   //println(findFirstIndex(Array("a", "b"), (i: String) => i == "c"))
+  //println(isSorted[String](Array("a", "b", "c", "d","A"), (a, b) => a < b))
   println(isSorted[String](Array("a", "b", "c", "d","A"), (a, b) => a < b))
 
 }
