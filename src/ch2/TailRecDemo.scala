@@ -119,14 +119,16 @@ object TailRecDemo extends App {
     (a: A) => (b: B) => f(a, b)
   }
 
-  def reverseCurry[A, B, C](f: A => B => C): (A, B) => C = {
-    (a: A, b: B) => f(a)(b)
-  }
-
   //println(msg("fib",10,fib))
   //println(findFirstIndex(Array("a", "b"), (i: String) => i == "c"))
   //println(isSorted[String](Array("a", "b", "c", "d","A"), (a, b) => a < b))
   //println(isSorted[String](Array("a", "b", "c", "d", "A"), (a, b) => a < b))
   //println(a1(1))
   //println(a1(1)(2))
+  def reverseCurry[A, B, C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
+  }
+
+
+  val f = (d:Double) => math.abs(d)
 }
