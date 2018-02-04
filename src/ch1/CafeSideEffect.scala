@@ -73,4 +73,11 @@ object CafeSideEffect extends App {
   val cafe = new Cafe()
   val charges = List(cafe.bufCoffees(card, 10)._2, cafe.bufCoffees(card, 10)._2)
   println(coalesce(charges))
+
+  def quickSort(arr: Array[Int]): Array[Int] = {
+    if (arr.length <= 1) return arr
+    val k = arr(0)
+    Array.concat(quickSort(arr.filter(_ < k)), arr.filter(_ == k), quickSort(arr.filter(_ > k)))
+  }
+  println(quickSort(Array(3,4,1,-1)).mkString(", "))
 }
