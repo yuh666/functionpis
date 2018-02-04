@@ -74,6 +74,7 @@ object TailRecDemo extends App {
 
   /**
     * 检查是否是有序的
+    *
     * @param arr
     * @param ordered
     * @tparam A
@@ -81,33 +82,51 @@ object TailRecDemo extends App {
     */
   def isSorted[A](arr: Array[A], ordered: (A, A) => Boolean): Boolean = {
     var res = true
-    for (i <- 0 until arr.length if ((i + 1) < arr.length && ordered(arr(i),arr(i+1)))) res = false
+    for (i <- 0 until arr.length if ((i + 1) < arr.length && ordered(arr(i), arr(i + 1)))) res = false
     res
   }
 
 
   /**
-    * 检查是否是有序的 递归就是在此步返回或者在以后的某一步返回
+    * 检查是否是有序的 递归就是在此步返回或者在以后的某一步返回 理论上第一行就是卫语句 递归不一定一定到最后 判断真假的情况下 随时可能返回、
+    *
     * @param arr
     * @param ordered
     * @tparam A
     * @return
     */
   def isSorted1[A](arr: Array[A], ordered: (A, A) => Boolean): Boolean = {
-    def go(n:Int):Boolean={
+    def go(n: Int): Boolean = {
       n match {
-        case n if n >= arr.length-1 => true
-        case n if(!ordered(arr(n),arr(n+1))) => false
-        case _ => go(n+1)
+        case n if n >= arr.length - 1 => true
+        case n if (!ordered(arr(n), arr(n + 1))) => false
+        case _ => go(n + 1)
       }
     }
+
     go(0)
   }
 
+  def a(a: Int)(b: Int) = a + b
+
+  def a1(a: Int): Int => Int = (b: Int) => a + b
+
+  def partital[A, B, C](a: A, f: (A, B) => C): B => C = {
+    (b: B) => f(a, b)
+  }
+
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    (a: A) => (b: B) => f(a, b)
+  }
+
+  def reverseCurry[A, B, C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
+  }
 
   //println(msg("fib",10,fib))
   //println(findFirstIndex(Array("a", "b"), (i: String) => i == "c"))
   //println(isSorted[String](Array("a", "b", "c", "d","A"), (a, b) => a < b))
-  println(isSorted[String](Array("a", "b", "c", "d","A"), (a, b) => a < b))
-
+  //println(isSorted[String](Array("a", "b", "c", "d", "A"), (a, b) => a < b))
+  //println(a1(1))
+  //println(a1(1)(2))
 }
