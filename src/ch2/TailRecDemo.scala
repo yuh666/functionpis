@@ -96,7 +96,7 @@ object TailRecDemo extends App {
   def isSorted1[A](arr: Array[A], ordered: (A, A) => Boolean): Boolean = {
     def go(n:Int):Boolean={
       n match {
-        case n if n > arr.length-1 => true
+        case n if n >= arr.length-1 => true
         case n if(!ordered(arr(n),arr(n+1))) => false
         case _ => go(n+1)
       }
