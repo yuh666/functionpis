@@ -172,8 +172,39 @@ object List {
     foldLeft(as, List[A]())((i, j) => Cons(j, i))
   }
 
+  def appendViaFoldRight[A](l: List[A], r: List[A]): List[A] = {
+    foldRight(l, r)(Cons(_, _))
+  }
+
+  def concat[A](list: List[List[A]]): List[A] = {
+    foldLeft(list,Nil:List[A])(append)
+  }
+
+  def increment(list: List[Int]):List[Int]={
+    foldRight(list,List[Int]())((i,j) => Cons(i+1,j))
+  }
+
+  /**
+    * Right -> 从右一压栈到最后倒着执行运算
+    * Left -> 从左一运算
+    * 然后压栈
+    *
+    * @param l
+    * @param r
+    * @tparam A
+    * @return
+    */
+  def appendViaFoldLeft[A](l: List[A], r: List[A]): List[A] = {
+    foldLeft(l, r)((i, j) => Cons(j, i))
+  }
+
+  def dts(list: List[Double]):List[String]={
+    foldRight(list,List[String]())((i,j) => (Cons(i.toString,j)))
+  }
+
   def main(args: Array[String]): Unit = {
-    println(reverse(List(1, 2, 3, 4)))
+    println(dts(List(1, 2, 3, 4)))
+    //println(increment(List(1, 2, 3, 4)))
     //println(length2(List(1, 2, 3, 4)))
     //val unit = foldRight(List(1,2,3,4),Nil:List[Int])(Cons(_,_))
     //println(unit)
