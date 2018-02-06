@@ -104,6 +104,21 @@ object List {
   }
 
 
+  def foldRight1[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+    as match {
+      case Nil => z
+      case Cons(h, t) => f(h, foldRight1(t, z)(f))
+    }
+  }
+
+  def foldLeft1[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+    as match {
+      case Nil => z
+      case Cons(h, t) => foldLeft1(t, f(z, h))(f)
+    }
+  }
+
+
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
     as match {
       case Nil => z
@@ -153,8 +168,8 @@ object List {
     foldLeft(as, 0)((i, _) => i + 1)
   }
 
-  def reverse[A](as:List[A]):List[A]={
-    foldLeft(as,List[A]())((i,j) => Cons(j,i))
+  def reverse[A](as: List[A]): List[A] = {
+    foldLeft(as, List[A]())((i, j) => Cons(j, i))
   }
 
   def main(args: Array[String]): Unit = {
