@@ -1,5 +1,6 @@
 package ch3
 
+import scala.collection.immutable.Stream.Empty
 import scala.util.control.TailCalls.TailRec
 
 sealed trait List[+A]
@@ -152,7 +153,12 @@ object List {
     foldLeft(as, 0)((i, _) => i + 1)
   }
 
+  def reverse[A](as:List[A]):List[A]={
+    foldLeft(as,List[A]())((i,j) => Cons(j,i))
+  }
+
   def main(args: Array[String]): Unit = {
+    println(reverse(List(1, 2, 3, 4)))
     //println(length2(List(1, 2, 3, 4)))
     //val unit = foldRight(List(1,2,3,4),Nil:List[Int])(Cons(_,_))
     //println(unit)
