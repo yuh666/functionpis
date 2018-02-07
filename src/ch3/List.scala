@@ -255,6 +255,7 @@ object List {
     foldRight(list, List[String]())((i, j) => (Cons(i.toString, j)))
   }
 
+  @annotation.tailrec
   def startsWith[A](sup: List[A], pre: List[A]): Boolean = {
     (sup, pre) match {
       case (_, Nil) => true
@@ -263,6 +264,7 @@ object List {
     }
   }
 
+  @annotation.tailrec
   def hasSubSequence[A](sup: List[A], sub: List[A]): Boolean = {
     sup match {
       case Nil => sub == Nil
