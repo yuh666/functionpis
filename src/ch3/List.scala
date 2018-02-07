@@ -211,20 +211,29 @@ object List {
   }
 
 
-  def flatMap[A, B](as: List[A])(f: A => List[B]):List[B] = {
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = {
     concat(map(as)(f))
   }
 
-  def plusList(l:List[Int],r:List[Int]):List[Int]={
-    (l,r) match {
-      case (_,Nil) => Nil
-      case (Nil,_) => Nil
-      case (Cons(h,t),Cons(h1,t1)) => Cons(h1+h,plusList(t,t1))
+  def plusList(l: List[Int], r: List[Int]): List[Int] = {
+    (l, r) match {
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
+      case (Cons(h, t), Cons(h1, t1)) => Cons(h1 + h, plusList(t, t1))
     }
   }
 
+  def zipWith[A, B, C](l: List[A], r: List[B])(f: (A, B) => C): List[C] = {
+    (l, r) match {
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
+      case (Cons(h, t), Cons(h1, t1)) => Cons(f(h, h1), zipWith(t, t1)(f))
+    }
+  }
+
+
   def filter_flatMap[A](as: List[A])(f: A => Boolean): List[A] = {
-    flatMap(as)(i => if(f(i)) List(i) else Nil)
+    flatMap(as)(i => if (f(i)) List(i) else Nil)
   }
 
 
@@ -245,6 +254,23 @@ object List {
   def dts(list: List[Double]): List[String] = {
     foldRight(list, List[String]())((i, j) => (Cons(i.toString, j)))
   }
+
+  def startsWith[A](sup: List[A], pre: List[A]): Boolean = {
+    (sup, pre) match {
+      case (_, Nil) => true
+      case (Cons(h1, t1), Cons(h2, t2)) if (h1 == h2) => startsWith(t1, t2)
+      case _ => false
+    }
+  }
+
+  def hasSubSequence[A](sup: List[A], sub: List[A]): Boolean = {
+    sup match {
+      case Nil => sub == Nil
+      case _ if (startsWith(sup, sub)) => true
+      case Cons(h, t) => hasSubSequence(t, sub)
+    }
+  }
+
 
   def main(args: Array[String]): Unit = {
     println(filter_1(List(1, 2, 3))(_ == 1))
