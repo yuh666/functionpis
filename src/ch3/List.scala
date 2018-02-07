@@ -1,6 +1,7 @@
 package ch3
 
 import scala.collection.immutable.Stream.Empty
+import scala.collection.mutable.ListBuffer
 import scala.util.control.TailCalls.TailRec
 
 sealed trait List[+A]
@@ -177,12 +178,55 @@ object List {
   }
 
   def concat[A](list: List[List[A]]): List[A] = {
-    foldLeft(list,Nil:List[A])(append)
+    foldLeft(list, Nil: List[A])(append)
   }
 
-  def increment(list: List[Int]):List[Int]={
-    foldRight(list,List[Int]())((i,j) => Cons(i+1,j))
+  def increment(list: List[Int]): List[Int] = {
+    foldRight(list, List[Int]())((i, j) => Cons(i + 1, j))
   }
+
+  def map[A, B](as: List[A])(f: A => B): List[B] = {
+    foldRight(as, Nil: List[B])((i, j) => Cons(f(i), j))
+  }
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = {
+    foldRight(as, Nil: List[A]) { (i, j) =>
+      if (f(i)) Cons(i, j) else j
+    }
+  }
+
+  def filter_1[A](as: List[A])(f: A => Boolean): List[A] = {
+    val buf = new ListBuffer[A]()
+
+    def go(as: List[A]): List[A] = {
+      as match {
+        case Nil => as
+        case Cons(h, t) if (f(h)) => buf += h; go(t)
+        case Cons(_, t) => go(t)
+      }
+    }
+
+    go(as)
+    List(buf.toList: _*)
+  }
+
+
+  def flatMap[A, B](as: List[A])(f: A => List[B]):List[B] = {
+    concat(map(as)(f))
+  }
+
+  def plusList(l:List[Int],r:List[Int]):List[Int]={
+    (l,r) match {
+      case (_,Nil) => Nil
+      case (Nil,_) => Nil
+      case (Cons(h,t),Cons(h1,t1)) => Cons(h1+h,plusList(t,t1))
+    }
+  }
+
+  def filter_flatMap[A](as: List[A])(f: A => Boolean): List[A] = {
+    flatMap(as)(i => if(f(i)) List(i) else Nil)
+  }
+
 
   /**
     * Right -> 从右一压栈到最后倒着执行运算
@@ -198,12 +242,13 @@ object List {
     foldLeft(l, r)((i, j) => Cons(j, i))
   }
 
-  def dts(list: List[Double]):List[String]={
-    foldRight(list,List[String]())((i,j) => (Cons(i.toString,j)))
+  def dts(list: List[Double]): List[String] = {
+    foldRight(list, List[String]())((i, j) => (Cons(i.toString, j)))
   }
 
   def main(args: Array[String]): Unit = {
-    println(dts(List(1, 2, 3, 4)))
+    println(filter_1(List(1, 2, 3))(_ == 1))
+    //println(dts(List(1, 2, 3, 4)))
     //println(increment(List(1, 2, 3, 4)))
     //println(length2(List(1, 2, 3, 4)))
     //val unit = foldRight(List(1,2,3,4),Nil:List[Int])(Cons(_,_))
