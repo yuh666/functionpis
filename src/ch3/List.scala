@@ -274,6 +274,25 @@ object List {
   }
 
 
+  @annotation.tailrec
+  def startsWith1[A](sup: List[A], sub: List[A]): Boolean = {
+    (sub, sup) match {
+      case (_, Nil) => true
+      case (Cons(h1, t1), Cons(h2, t2)) if (h1 == h2) => startsWith1(t1, t2)
+      case _ => false
+    }
+  }
+
+  @annotation.tailrec
+  def hasSubsequence1[A](sup:List[A],sub:List[A]):Boolean={
+    sup match {
+      case Nil => sub == Nil
+      case _ if(startsWith1(sub,sub)) => true
+      case Cons(h,t) => hasSubsequence1(t,sub)
+    }
+  }
+
+
   def main(args: Array[String]): Unit = {
     println(filter_1(List(1, 2, 3))(_ == 1))
     //println(dts(List(1, 2, 3, 4)))
