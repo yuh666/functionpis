@@ -35,9 +35,32 @@ object Tree {
     }
   }
 
+  def fold[A, B](tree: Tree[A])(f: A => B)(g: (B, B) => B): B = {
+    tree match {
+      case Leaf(v) => f(v)
+      case Branch(l, r) => g(fold(l)(f)(g), fold(r)(f)(g))
+    }
+  }
+
+  def sizeViaFold[A](tree: Tree[A]): Int = {
+    fold(tree)(_ => 1)((l, r) => 1 + l + r)
+  }
+
+  def maxViaFold(tree: Tree[Int]): Int = {
+    fold(tree)(v => v)((v1, v2) => v1 max v2)
+  }
+
+  def depthViaFold[A](tree: Tree[A]): Int = {
+    fold(tree)(_ => 0)((l, r) => 1 + (l max r))
+  }
+
+  def mapViaFold[A, B](tree: Tree[A])(f: A => B): Tree[B] = {
+    fold(tree)(a => Leaf(f(a)):Tree[B])((l,r) => Branch(l,r))
+  }
+
   def main(args: Array[String]): Unit = {
-    val tree1 = Branch(Branch(Branch(Leaf(1), Leaf(1)), Leaf(1)), Leaf(2))
-    println(depth(tree1))
+    val tree1 = Branch(Branch(Branch(Leaf(11), Leaf(1)), Leaf(1)), Leaf(2))
+    println(depthViaFold(tree1))
   }
 
 }
